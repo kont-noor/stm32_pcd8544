@@ -1,5 +1,5 @@
 # Sources to compile
-SRC_FILES = main.cpp
+SRC_FILES = main.cpp pcd8544.cpp
 OBJ_FILES = $(addprefix $(BUILD_PATH)/,$(SRC_FILES:.cpp=.o))
 
 $(BUILD_PATH)/%.o: %.cpp
