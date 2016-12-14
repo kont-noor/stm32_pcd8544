@@ -29,19 +29,19 @@ void screen::redraw() {
     for (uint8_t j = 0; j < 48; j++)
       buffMap[i][j] = map[i][j];
 
-  uint8_t bitRow[84];
   uint8_t digit;
+  uint8_t byte;
 
   for (uint8_t row = 0; row < 6; row++) {
     for (uint8_t col = 0; col < 84; col++) {
-      bitRow[col] = 0;
+      byte = 0;
       for (uint8_t bit = 0; bit < 8; bit++) {
         digit = buffMap[col][row * 8 + bit] ? 1 : 0;
-        bitRow[col] |= digit << bit;
+        byte |= digit << bit;
       }
+      lcd.gotoRc(row, col);
+      lcd.data(byte);
     }
-    lcd.gotoRc(row, 0);
-    lcd.bitmap(bitRow, 1, 84);
   }
 }
 
