@@ -25,15 +25,36 @@ void screen::init() {
 }
 
 void screen::redraw() {
-  lcd.clear();
   mapToBitmap();
+  if (anyPixelDeleted())
+    lcd.clear();
+
+  for (int i = 0; i < 504; i ++)
+    buffBitmap[i] = bitmap[i];
+
   lcd.gotoRc(0, 0);
-  lcd.bitmap(bitmap, 6, 84);
+  lcd.bitmap(buffBitmap, 6, 84);
+}
+
+bool screen::anyPixelDeleted() {
+  uint8_t changedMask;
+
+  for (int i = 0; i < 504; i ++) {
+    changedMask = bitmap[i] ^ buffBitmap[i];
+
+    if (changedMask > 0 && (changedMask & bitmap[i]) == 0) {
+      return true;
+    }
+  }
+  return false;
 }
 
 void screen::clear() {
-  for (int i = 0; i < 504; i++)
-    bitmap[i] = 0;
+  for (uint8_t i = 0; i < 84; i++)
+    for (uint8_t j = 0; j < 48; j++)
+      map[i][j] = false;
+
+  lcd.clear();
   redraw();
 }
 
@@ -55,20 +76,11 @@ void screen::mapToBitmap() {
   }
 }
 
-void screen::putPixel(int x, int y) {
-  ////bytes row starting from 0
-  //int row = y / 8;
-  //int bit = y % 8;
-  //if (bit == 0)
-  //  row--;
+void screen::clearPixel(uint8_t x, uint8_t y) {
+  map[x][y] = false;
+}
 
-  //int byte_position = 84 * row + x;
-
-  //uint8_t byte = bitmap[byte_position] | 1 << bit;
-  ////uint8_t byte = 1 << bit;
-  ////clear();
-
-  //setBitmapByte(byte_position, byte);
+void screen::putPixel(uint8_t x, uint8_t y) {
   map[x][y] = true;
 }
 
