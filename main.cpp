@@ -15,20 +15,20 @@ void fillScreen() {
 
 void setup() {
   gameScreen.init();
+
+  float result;
+
+  for (int x = 0; x < 84; x++) {
+    result = 24 + 20 * sin((float)x/12);
+    if (result < 48)
+      gameScreen.putPixel(x, int(result));
+  }
+  gameScreen.redraw();
+
+  delay(1000);
 }
 
 void loop() {
-  for (int y = 0; y < 48; y++) {
-    for (int x = 0; x < 84; x++) {
-      gameScreen.putPixel(x, y);
-      gameScreen.redraw();
-    }
-  }
-
-  delay(1000);
-
-  gameScreen.clear();
-  delay(1000);
 }
 
 __attribute__((constructor)) void premain() {
