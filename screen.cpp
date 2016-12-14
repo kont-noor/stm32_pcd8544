@@ -25,9 +25,6 @@ void screen::init() {
 }
 
 void screen::redraw() {
-  if (anyPixelDeleted())
-    lcd.clear();
-
   for (uint8_t i = 0; i < 84; i++)
     for (uint8_t j = 0; j < 48; j++)
       buffMap[i][j] = map[i][j];
@@ -42,9 +39,9 @@ void screen::redraw() {
         digit = buffMap[col][row * 8 + bit] ? 1 : 0;
         bitRow[col] |= digit << bit;
       }
-      lcd.gotoRc(row, 0);
-      lcd.bitmap(bitRow, 1, 84);
     }
+    lcd.gotoRc(row, 0);
+    lcd.bitmap(bitRow, 1, 84);
   }
 }
 
