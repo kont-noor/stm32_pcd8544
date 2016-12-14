@@ -13,6 +13,5 @@ private:
   bool map[84][48];
   pcd8544 lcd;
 
-  bool anyPixelDeleted();
-  void mapToBitmap();
+  void redrawByte(uint8_t, uint8_t);
 };

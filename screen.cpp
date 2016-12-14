@@ -25,34 +25,31 @@ void screen::init() {
 }
 
 void screen::redraw() {
-  for (uint8_t i = 0; i < 84; i++)
-    for (uint8_t j = 0; j < 48; j++)
-      buffMap[i][j] = map[i][j];
-
-  uint8_t digit;
-  uint8_t byte;
-
   for (uint8_t row = 0; row < 6; row++) {
     for (uint8_t col = 0; col < 84; col++) {
-      byte = 0;
-      for (uint8_t bit = 0; bit < 8; bit++) {
-        digit = buffMap[col][row * 8 + bit] ? 1 : 0;
-        byte |= digit << bit;
-      }
-      lcd.gotoRc(row, col);
-      lcd.data(byte);
+      redrawByte(col, row);
     }
   }
 }
 
-bool screen::anyPixelDeleted() {
-  for (uint8_t i = 0; i < 84; i++) {
-    for (uint8_t j = 0; j < 48; j++) {
-      if (map[i][j] == false && buffMap[i][j] == true)
-        return true;
+void screen::redrawByte(uint8_t col, uint8_t row) {
+  uint8_t byte = 0;
+  //TODO: probably add flag array and set it on change pixel
+  bool needRedraw = false;
+
+  for (uint8_t bit = 0; bit < 8; bit++) {
+    uint8_t index = row * 8 + bit;
+    if (buffMap[col][index] != map[col][index]) {
+      buffMap[col][index] = map[col][index];
+      needRedraw = true;
     }
+    byte |= buffMap[col][index] << bit;
   }
-  return false;
+
+  if (needRedraw) {
+    lcd.gotoRc(row, col);
+    lcd.data(byte);
+  }
 }
 
 void screen::clear() {
