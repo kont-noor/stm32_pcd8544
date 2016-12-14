@@ -59,7 +59,6 @@ void screen::clear() {
     for (uint8_t j = 0; j < 48; j++)
       map[i][j] = false;
 
-  lcd.clear();
   redraw();
 }
 
@@ -82,10 +81,12 @@ void screen::mapToBitmap() {
 }
 
 void screen::clearPixel(uint8_t x, uint8_t y) {
-  map[x][y] = false;
+  if (x < 84 &&  x >= 0 && y < 48 && y >= 0)
+    map[x][y] = false;
 }
 
 void screen::putPixel(uint8_t x, uint8_t y) {
-  map[x][y] = true;
+  if (x < 84 && x >= 0 && y < 48 && y >= 0)
+    map[x][y] = true;
 }
 
